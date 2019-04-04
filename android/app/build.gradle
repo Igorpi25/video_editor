@@ -24,6 +24,8 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.igorpi25'
 
 android {
     compileSdkVersion 28
@@ -64,4 +66,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.github.igorpi25:video-trimming-android:2.0.0'
 }
+
