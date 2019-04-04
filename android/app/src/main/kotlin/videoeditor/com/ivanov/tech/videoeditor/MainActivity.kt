@@ -1,11 +1,19 @@
 package videoeditor.com.ivanov.tech.videoeditor
 
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 
 import io.flutter.app.FlutterActivity
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
+import com.video_trim.K4LVideoTrimmer
+import com.video_trim.interfaces.OnK4LVideoListener
+import com.video_trim.interfaces.OnTrimVideoListener
+import com.video_trim.utils.TrimVideoUtils
+import java.io.File
+
 
 class MainActivity : FlutterActivity() {
 
@@ -39,6 +47,46 @@ class MainActivity : FlutterActivity() {
     }
 
     fun trimVideo(path: String?): String? {
-        return path
+
+        val file = File(path)
+        var result_path: String? = null
+        TrimVideoUtils.startTrim(
+                file,
+                getDestinationPath(),
+                1000,
+                5000,
+                object : OnTrimVideoListener {
+                    override fun onTrimStarted() {
+                        Log.d("Igor", "onTrimStarted")
+                    }
+
+                    override fun getResult(uri: Uri?) {
+                        Log.d("Igor", "getResult uri=$uri")
+                        result_path = uri?.path
+                    }
+
+                    override fun onError(message: String?) {
+                        Log.d("Igor", "onError message=$message")
+                    }
+
+                    override fun cancelAction() {
+                        Log.d("Igor", "cancelAction")
+                    }
+
+                }
+
+        )
+
+
+        return result_path
+    }
+
+    private fun getDestinationPath(): String {
+
+        val folder = Environment.getExternalStorageDirectory()
+        val mFinalPath = folder.path + File.separator
+        Log.d("Igor", "getDestinationPath path=$mFinalPath")
+
+        return mFinalPath
     }
 }
